@@ -1,0 +1,30 @@
+import numpy as np
+from core.problem import Problem
+
+
+class RastriginProblem(Problem):
+
+    def __init__(self, dim=10, bounds=(-5.12, 5.12)):
+        self.dim = dim
+        self.bounds = bounds
+
+    def sample_solution(self):
+        return np.random.uniform(
+            self.bounds[0],
+            self.bounds[1],
+            self.dim
+        )
+
+    def evaluate(self, x):
+        A = 10
+        return A * self.dim + sum(
+            x_i**2 - A * np.cos(2*np.pi*x_i)
+            for x_i in x
+        )
+
+    def neighbor(self, x):
+        step = np.random.uniform(-1, 1, self.dim)
+        return x + step
+
+    def is_better(self, a, b):
+        return a < b
