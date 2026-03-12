@@ -3,6 +3,8 @@ from abc import ABC, abstractmethod
 
 class Problem(ABC):
 
+    problem_type = None
+
     @abstractmethod
     def sample_solution(self):
         """Случайная генерация допустимого решения"""

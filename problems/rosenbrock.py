@@ -1,7 +1,12 @@
 import numpy as np
 from core.problem import Problem
+from utils import reflect
+
 
 class RosenbrockProblem(Problem):
+
+    problem_type = "continuous"
+
     def __init__(self, dim=10, bounds=(-5, 10)):
         self.dim = dim
         self.bounds = bounds
@@ -15,7 +20,12 @@ class RosenbrockProblem(Problem):
 
     def neighbor(self, x):
         step = np.random.normal(0, 0.1, self.dim)
-        return x + step
+        # check if inside boundaries and if not reflect
+        return reflect(
+            x + step,
+            self.bounds[0],
+            self.bounds[1]
+        )
 
     def is_better(self, a, b):
         return a < b

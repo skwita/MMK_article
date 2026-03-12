@@ -1,6 +1,5 @@
 import numpy as np
 
-
 def generate_knapsack_instance(
         n_items=100,
         weight_range=(10, 100),
@@ -26,3 +25,13 @@ def generate_knapsack_instance(
     capacity = int(weights.sum() * capacity_ratio)
 
     return weights.tolist(), values.tolist(), capacity
+
+
+def reflect(x, lower, upper):
+    x = np.copy(x)
+    for i in range(len(x)):
+        if x[i] < lower:
+            x[i] = lower + (lower - x[i])
+        elif x[i] > upper:
+            x[i] = upper - (x[i] - upper)
+    return x

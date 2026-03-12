@@ -1,5 +1,8 @@
-import numpy as np
-
+from optimizers.ARS import AdaptiveRandomSearch
+from optimizers.CEM import CrossEntropyMethod
+from optimizers.MCMC import MonteCarloMarkovChain
+from optimizers.MCTS import MonteCarloTreeSearch
+from optimizers.basin_hopping import BasinHopping
 from problems.ackley import AckleyProblem
 from problems.rastrigin import RastriginProblem
 from problems.knapsack import KnapsackProblem
@@ -12,43 +15,50 @@ from problems.rosenbrock import RosenbrockProblem
 from problems.schwefel import SchwefelProblem
 from utils import generate_knapsack_instance
 
-# ПАРАМЕТРЫ
-weights, values, capacity = generate_knapsack_instance(
-    n_items=10,
-    capacity_ratio=0.45,
-    seed=42
-)
-rastrigin_dimensions  = 2
-rosenbrock_dimensions = 2
-ackley_dimensions     = 2
-schwefel_dimensions   = 2
 
-# ОПТИМИЗАЦИОННЫЕ ЗАДАЧИ
-rastrigin = RastriginProblem(rastrigin_dimensions)
-rosenbrock = RosenbrockProblem(rosenbrock_dimensions)
-ackley = AckleyProblem(ackley_dimensions)
-schwefel = SchwefelProblem(schwefel_dimensions)
+if __name__ == "__main__":
+    # ПАРАМЕТРЫ
+    weights, values, capacity = generate_knapsack_instance(
+        n_items=10,
+        capacity_ratio=0.45,
+        seed=42
+    )
+    rastrigin_dimensions  = 2
+    rosenbrock_dimensions = 2
+    ackley_dimensions     = 2
+    schwefel_dimensions   = 2
 
-knapsack = KnapsackProblem(weights,values,capacity)
+    # ОПТИМИЗАЦИОННЫЕ ЗАДАЧИ
+    rastrigin = RastriginProblem(rastrigin_dimensions)
+    rosenbrock = RosenbrockProblem(rosenbrock_dimensions)
+    ackley = AckleyProblem(ackley_dimensions)
+    schwefel = SchwefelProblem(schwefel_dimensions)
 
-problems=[
-    rastrigin,
-    rosenbrock,
-    ackley,
-    schwefel,
-    knapsack,
-]
+    knapsack = KnapsackProblem(weights,values,capacity)
 
-# ОПТИМИЗАТОРЫ
-optimizers = [
-    RandomSearch(10000),
-    SimulatedAnnealing(10000),
-]
+    problems=[
+        rastrigin,
+        rosenbrock,
+        ackley,
+        schwefel,
+        knapsack,
+    ]
 
-benchmark = Benchmark(
-    problems=problems,
-    optimizers=optimizers,
-    runs=200
-)
+    # ОПТИМИЗАТОРЫ
+    optimizers = [
+        RandomSearch(),
+        SimulatedAnnealing(),
+        # MonteCarloMarkovChain(),
+        # MonteCarloTreeSearch(),
+        CrossEntropyMethod(),
+        BasinHopping(),
+        AdaptiveRandomSearch(),
+    ]
 
-results = benchmark.run()
+    benchmark = Benchmark(
+        problems=problems,
+        optimizers=optimizers,
+        runs=200
+    )
+
+    results = benchmark.run()

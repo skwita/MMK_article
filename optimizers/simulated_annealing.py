@@ -27,9 +27,13 @@ class SimulatedAnnealing(Optimizer):
             y = problem.neighbor(x)
             y_value = problem.evaluate(y)
 
-            delta = y_value - value
+            if problem.is_better(y_value, value):
+                accept = True
+            else:
+                delta = abs(y_value - value)
+                accept = random.random() < math.exp(-delta / T)
 
-            if delta < 0 or random.random() < math.exp(-delta / T):
+            if accept:
                 x = y
                 value = y_value
 
