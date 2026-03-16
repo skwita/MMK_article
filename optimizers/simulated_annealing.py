@@ -11,6 +11,12 @@ class SimulatedAnnealing(Optimizer):
         self.T0 = T0
         self.alpha = alpha
 
+    def worsening(self, current, candidate, problem):
+        if problem.objective == "min":
+            return candidate - current
+        else:
+            return current - candidate
+
     def optimize(self, problem):
 
         x = problem.sample_solution()
@@ -30,7 +36,7 @@ class SimulatedAnnealing(Optimizer):
             if problem.is_better(y_value, value):
                 accept = True
             else:
-                delta = abs(y_value - value)
+                delta = self.worsening(value, y_value, problem)  # delta > 0 для ухудшения
                 accept = random.random() < math.exp(-delta / T)
 
             if accept:

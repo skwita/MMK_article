@@ -21,7 +21,8 @@ class MonteCarloMarkovChain(Optimizer):
 
             # Метрополис-хастингс
             delta = fx_new - fx
-            if delta < 0 or random.random() < np.exp(-delta / self.temperature):
+            if ((problem.objective=="min" and (delta < 0 or random.random() < np.exp(-delta / self.temperature))) or
+                    (problem.objective=="max" and delta > 0 or random.random() < np.exp(-delta / self.temperature))):
                 x = x_new
                 fx = fx_new
 

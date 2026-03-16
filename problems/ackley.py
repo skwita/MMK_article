@@ -6,6 +6,7 @@ from utils import reflect
 class AckleyProblem(Problem):
 
     problem_type = "continuous"
+    objective = "min"
 
     def __init__(self, dim=10, bounds=(-32.768, 32.768)):
         self.dim = dim

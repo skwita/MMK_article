@@ -10,8 +10,8 @@ class MonteCarloTreeSearch(Optimizer):
         self.rollout_depth = rollout_depth
 
     def optimize(self, problem):
-        best_solution = None
-        best_value = float("inf")
+        best_solution = problem.sample_solution()
+        best_value = problem.evaluate(best_solution)
         history = []
 
         for _ in range(self.iterations):
@@ -20,7 +20,7 @@ class MonteCarloTreeSearch(Optimizer):
                 x = problem.neighbor(x)
             fx = problem.evaluate(x)
 
-            if best_solution is None or problem.is_better(fx, best_value):
+            if problem.is_better(fx, best_value):
                 best_solution = x
                 best_value = fx
 

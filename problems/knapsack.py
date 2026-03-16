@@ -5,6 +5,7 @@ from core.problem import Problem
 class KnapsackProblem(Problem):
 
     problem_type = "discrete"
+    objective = "max"
 
     def __init__(self, weights, values, capacity):
         self.weights = np.array(weights)

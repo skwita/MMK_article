@@ -14,19 +14,20 @@ from experiment.benchmark import Benchmark
 from problems.rosenbrock import RosenbrockProblem
 from problems.schwefel import SchwefelProblem
 from utils import generate_knapsack_instance
+from visualization.convergence_plot import plot_convergence
 
 
 if __name__ == "__main__":
     # ПАРАМЕТРЫ
     weights, values, capacity = generate_knapsack_instance(
-        n_items=10,
+        n_items=50,
         capacity_ratio=0.45,
         seed=42
     )
-    rastrigin_dimensions  = 2
-    rosenbrock_dimensions = 2
-    ackley_dimensions     = 2
-    schwefel_dimensions   = 2
+    rastrigin_dimensions  = 10
+    rosenbrock_dimensions = 10
+    ackley_dimensions     = 10
+    schwefel_dimensions   = 10
 
     # ОПТИМИЗАЦИОННЫЕ ЗАДАЧИ
     rastrigin = RastriginProblem(rastrigin_dimensions)
@@ -48,8 +49,8 @@ if __name__ == "__main__":
     optimizers = [
         RandomSearch(),
         SimulatedAnnealing(),
-        # MonteCarloMarkovChain(),
-        # MonteCarloTreeSearch(),
+        MonteCarloMarkovChain(),
+        MonteCarloTreeSearch(),
         CrossEntropyMethod(),
         BasinHopping(),
         AdaptiveRandomSearch(),
@@ -62,3 +63,4 @@ if __name__ == "__main__":
     )
 
     results = benchmark.run()
+    plot_convergence(results, problems, save_dir="plots", show_std=True)

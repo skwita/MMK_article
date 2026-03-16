@@ -5,6 +5,7 @@ from utils import reflect
 class SchwefelProblem(Problem):
 
     problem_type = "continuous"
+    objective = "min"
 
     def __init__(self, dim=10, bounds=(-500, 500)):
         self.dim = dim

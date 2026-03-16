@@ -12,6 +12,7 @@ def _run_single(problem, optimizer, runs):
     scores = []
     times = []
     solutions = []
+    histories = []
 
     for _ in range(runs):
 
@@ -24,8 +25,9 @@ def _run_single(problem, optimizer, runs):
         scores.append(result.best_value)
         solutions.append(result.best_solution)
         times.append(elapsed)
+        histories.append(result.history)
 
-    bench = BenchmarkResult(scores, solutions)
+    bench = BenchmarkResult(scores, solutions, histories, objective=problem.objective)
 
     avg_time = sum(times) / len(times)
 
@@ -99,5 +101,5 @@ class Benchmark:
                     f"{bench.best:>15.4f} "
                     f"{bench.median:>15.4f} "
                     f"{avg_time:>15.3f}"
-                    # f"{bench.best_solution}"
+                    f"{bench.best_solution}"
                 )

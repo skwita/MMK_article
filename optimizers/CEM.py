@@ -60,7 +60,13 @@ class CrossEntropyMethod(Optimizer):
 
             values = np.array([problem.evaluate(x) for x in population])
 
-            elite_idx = np.argsort(values)[:elite_size]
+            elite_idx = np.argsort(values)
+            if problem.objective == "max":
+                elite_idx = elite_idx[::-1]
+            elite_idx = elite_idx[:elite_size]
+
+            best_idx = np.argmax(values) if problem.objective == "max" else np.argmin(values)
+
             elite = population[elite_idx]
 
             new_mu = elite.mean(axis=0)
@@ -69,8 +75,6 @@ class CrossEntropyMethod(Optimizer):
             mu = self.alpha * mu + (1 - self.alpha) * new_mu
             sigma = self.alpha * sigma + (1 - self.alpha) * new_sigma
             sigma = np.maximum(sigma, self.min_sigma)
-
-            best_idx = np.argmin(values)
 
             if best_solution is None or problem.is_better(values[best_idx], best_value):
                 best_solution = population[best_idx].copy()
@@ -104,7 +108,12 @@ class CrossEntropyMethod(Optimizer):
 
             values = np.array([problem.evaluate(x) for x in population])
 
-            elite_idx = np.argsort(values)[:elite_size]
+            elite_idx = np.argsort(values)
+            if problem.objective == "max":
+                elite_idx = elite_idx[::-1]
+            elite_idx = elite_idx[:elite_size]
+
+            best_idx = np.argmax(values) if problem.objective == "max" else np.argmin(values)
             elite = population[elite_idx]
 
             new_p = elite.mean(axis=0)
@@ -115,8 +124,6 @@ class CrossEntropyMethod(Optimizer):
                 self.min_probability,
                 self.max_probability
             )
-
-            best_idx = np.argmin(values)
 
             if best_solution is None or problem.is_better(values[best_idx], best_value):
                 best_solution = population[best_idx].copy()

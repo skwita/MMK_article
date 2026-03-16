@@ -33,6 +33,12 @@ class BasinHopping(Optimizer):
 
         return best_local, best_local_value
 
+    def worsening(self, current, candidate, problem):
+        if problem.objective == "min":
+            return candidate - current
+        else:
+            return current - candidate
+
     def optimize(self, problem):
 
         x = problem.sample_solution()
@@ -56,9 +62,9 @@ class BasinHopping(Optimizer):
             if problem.is_better(y_value, value):
                 accepted = True
             else:
-                delta = y_value - value
+                delta = self.worsening(value, y_value, problem)  # delta > 0 для ухудшения
                 try:
-                    accepted = random.random() < math.exp(-abs(delta) / self.temperature)
+                    accepted = random.random() < math.exp(-delta / self.temperature)
                 except OverflowError:
                     accepted = False
 

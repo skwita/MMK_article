@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 class Problem(ABC):
 
     problem_type = None
+    objective = None
 
     @abstractmethod
     def sample_solution(self):

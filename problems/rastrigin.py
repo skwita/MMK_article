@@ -6,6 +6,7 @@ from utils import reflect
 class RastriginProblem(Problem):
 
     problem_type = "continuous"
+    objective = "min"
 
     def __init__(self, dim=10, bounds=(-5.12, 5.12)):
         self.dim = dim
