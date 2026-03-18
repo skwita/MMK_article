@@ -6,16 +6,15 @@ class RandomSearch(Optimizer):
 
     def optimize(self, problem):
 
-        best_solution = None
-        best_value = float("inf")
+        best_solution = problem.sample_solution()
+        best_value = problem.evaluate(best_solution)
         history = []
 
         for _ in range(self.iterations):
-
             s = problem.sample_solution()
             value = problem.evaluate(s)
 
-            if best_solution is None or problem.is_better(value, best_value):
+            if problem.is_better(value, best_value):
                 best_solution = s
                 best_value = value
 

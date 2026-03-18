@@ -7,6 +7,7 @@ class AckleyProblem(Problem):
 
     problem_type = "continuous"
     objective = "min"
+    initial_step_size = 1.0
 
     def __init__(self, dim=10, bounds=(-32.768, 32.768)):
         self.dim = dim
@@ -22,8 +23,8 @@ class AckleyProblem(Problem):
         sum_cos = np.sum(np.cos(2*np.pi*x))
         return -20 * np.exp(-0.2*np.sqrt(sum_sq/n)) - np.exp(sum_cos/n) + 20 + np.e
 
-    def neighbor(self, x):
-        step = np.random.normal(0, 0.5, self.dim)
+    def neighbor(self, x, step_size=0.5):
+        step = np.random.normal(0, step_size, self.dim)
         # check if inside boundaries and if not reflect
         return reflect(
             x + step,

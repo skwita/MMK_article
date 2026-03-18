@@ -5,6 +5,7 @@ class Problem(ABC):
 
     problem_type = None
     objective = None
+    initial_step_size = None
 
     @abstractmethod
     def sample_solution(self):
@@ -17,7 +18,7 @@ class Problem(ABC):
         pass
 
     @abstractmethod
-    def neighbor(self, solution):
+    def neighbor(self, solution, step_size):
         """Соседнее решение (для MCMC, SA)"""
         pass
 

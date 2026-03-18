@@ -6,6 +6,7 @@ class SchwefelProblem(Problem):
 
     problem_type = "continuous"
     objective = "min"
+    initial_step_size = 20
 
     def __init__(self, dim=10, bounds=(-500, 500)):
         self.dim = dim
@@ -19,8 +20,8 @@ class SchwefelProblem(Problem):
         n = self.dim
         return 418.9829*n - np.sum(x * np.sin(np.sqrt(np.abs(x))))
 
-    def neighbor(self, x):
-        step = np.random.normal(0, 5, self.dim)
+    def neighbor(self, x, step_size=10):
+        step = np.random.normal(0, step_size, self.dim)
         # check if inside boundaries and if not reflect
         return reflect(
             x + step,

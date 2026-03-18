@@ -7,7 +7,7 @@ from core.result import OptimizationResult
 
 class BasinHopping(Optimizer):
 
-    def __init__(self, iterations=1000, local_steps=20, temperature=1.0):
+    def __init__(self, iterations=10000, local_steps=20, temperature=1.0):
         super().__init__(iterations)
         self.local_steps = local_steps
         self.temperature = temperature

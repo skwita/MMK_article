@@ -24,10 +24,10 @@ if __name__ == "__main__":
         capacity_ratio=0.45,
         seed=42
     )
-    rastrigin_dimensions  = 10
-    rosenbrock_dimensions = 10
-    ackley_dimensions     = 10
-    schwefel_dimensions   = 10
+    rastrigin_dimensions  = 2
+    rosenbrock_dimensions = 2
+    ackley_dimensions     = 2
+    schwefel_dimensions   = 2
 
     # ОПТИМИЗАЦИОННЫЕ ЗАДАЧИ
     rastrigin = RastriginProblem(rastrigin_dimensions)
@@ -49,8 +49,8 @@ if __name__ == "__main__":
     optimizers = [
         RandomSearch(),
         SimulatedAnnealing(),
-        MonteCarloMarkovChain(),
-        MonteCarloTreeSearch(),
+        # MonteCarloMarkovChain(),
+        # MonteCarloTreeSearch(),
         CrossEntropyMethod(),
         BasinHopping(),
         AdaptiveRandomSearch(),

@@ -7,6 +7,7 @@ class RastriginProblem(Problem):
 
     problem_type = "continuous"
     objective = "min"
+    initial_step_size = 0.5
 
     def __init__(self, dim=10, bounds=(-5.12, 5.12)):
         self.dim = dim
@@ -26,8 +27,8 @@ class RastriginProblem(Problem):
             for x_i in x
         )
 
-    def neighbor(self, x):
-        step = np.random.uniform(-1, 1, self.dim)
+    def neighbor(self, x, step_size=1):
+        step = np.random.uniform(-step_size, step_size, self.dim)
         # check if inside boundaries and if not reflect
         return reflect(
             x + step,

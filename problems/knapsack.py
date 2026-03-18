@@ -6,6 +6,7 @@ class KnapsackProblem(Problem):
 
     problem_type = "discrete"
     objective = "max"
+    initial_step_size = 1.0
 
     def __init__(self, weights, values, capacity):
         self.weights = np.array(weights)
@@ -27,10 +28,15 @@ class KnapsackProblem(Problem):
 
         return value
 
-    def neighbor(self, x):
+    def neighbor(self, x, step_size=1):
         y = x.copy()
-        i = np.random.randint(self.n)
-        y[i] = 1 - y[i]
+
+        flips = max(1, int(round(step_size)))
+        flips = min(flips, self.n)
+
+        indices = np.random.choice(self.n, size=flips, replace=False)
+        y[indices] = 1 - y[indices]
+
         return y
 
     def is_better(self, a, b):
