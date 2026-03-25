@@ -86,7 +86,7 @@ class Benchmark:
                 f"{'Median':>15} "
                 f"{'Time(s)':>15}"
                 f"{'Total time(s)':>15}"
-                f"{'Solution':>15}"
+                f"{'Solution':>30}"
             )
 
             print(header)
@@ -98,10 +98,10 @@ class Benchmark:
 
                 print(
                     f"{oname:<{method_width}} "
-                    f"{bench.mean:>15.4f} "
-                    f"{bench.std:>15.4f} "
-                    f"{bench.best:>15.4f} "
-                    f"{bench.median:>15.4f} "
+                    f"{bench.mean:>15.4e} "
+                    f"{bench.std:>15.4e} "
+                    f"{bench.best:>15.4e} "
+                    f"{bench.median:>15.4e} "
                     f"{avg_time:>15.3f}"
                     f"{total_time:>15.3f}"
                     f"{bench.best_solution}"

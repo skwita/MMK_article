@@ -27,11 +27,19 @@ def generate_knapsack_instance(
     return weights.tolist(), values.tolist(), capacity
 
 
+
 def reflect(x, lower, upper):
     x = np.copy(x)
+    width = upper - lower
+
+    if width <= 0:
+        raise ValueError("upper must be greater than lower")
+
     for i in range(len(x)):
-        if x[i] < lower:
-            x[i] = lower + (lower - x[i])
-        elif x[i] > upper:
-            x[i] = upper - (x[i] - upper)
+        while x[i] < lower or x[i] > upper:
+            if x[i] < lower:
+                x[i] = lower + (lower - x[i])
+            if x[i] > upper:
+                x[i] = upper - (x[i] - upper)
+
     return x

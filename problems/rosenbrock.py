@@ -9,7 +9,7 @@ class RosenbrockProblem(Problem):
     objective = "min"
     initial_step_size = 1
 
-    def __init__(self, dim=10, bounds=(-5, 10)):
+    def __init__(self, dim=10, bounds=(-2, 2)):
         self.dim = dim
         self.bounds = bounds
 

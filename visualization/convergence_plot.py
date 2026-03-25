@@ -37,8 +37,18 @@ def get_optimal_value(problem):
 
     return None
 
+def get_plot_bounds(problem):
+    name = problem.__class__.__name__
+    problem_bounds = {"AckleyProblem":      (-1,20),
+                      "RastriginProblem":   (-1,35),
+                      "RosenbrockProblem":  (-0.1,1),
+                      "SchwefelProblem":    (-1,800),
+                      "KnapsackProblem":    (600,1000),
+                      }
+    return problem_bounds[name]
 
-def plot_convergence(results, problems, save_dir="plots", show_std=True):
+
+def plot_convergence(results, problems, CEM_data, save_dir="plots", show_std=True):
     """
     Для каждой задачи строит один график:
     - кривые mean(best-so-far) для всех методов
@@ -55,23 +65,25 @@ def plot_convergence(results, problems, save_dir="plots", show_std=True):
         plt.figure(figsize=(10, 6))
 
         for method_name, (bench, _, _) in sorted(method_data.items()):
-            mean_hist = bench.mean_history()
-            std_hist = bench.std_history()
 
-            if len(mean_hist) == 0:
-                continue
 
-            x = np.arange(1, len(mean_hist) + 1)
+            # mean_hist = bench.mean_history()
+            # std_hist = bench.std_history()
 
-            plt.plot(x, mean_hist, label=method_name)
+            median = np.median(bench.histories, axis=0)
+            q25 = np.quantile(bench.histories, 0.25, axis=0)
+            q75 = np.quantile(bench.histories, 0.75, axis=0)
 
-            if show_std and len(std_hist) == len(mean_hist):
-                plt.fill_between(
-                    x,
-                    mean_hist - std_hist,
-                    mean_hist + std_hist,
-                    alpha=0.15
-                )
+            # if len(mean_hist) == 0:
+            #     continue
+
+            if method_name == "CrossEntropyMethod":
+                x = np.arange(1, len(median) + 1) * CEM_data[1]
+            else:
+                x = np.arange(1, len(median) + 1)
+
+            plt.plot(x, median, label=method_name)
+            plt.fill_between(x, q25, q75, alpha=0.15)
 
         if optimum is not None:
             plt.axhline(
@@ -84,6 +96,7 @@ def plot_convergence(results, problems, save_dir="plots", show_std=True):
         plt.title(f"Convergence on {problem_name}")
         plt.xlabel("Iteration")
         plt.ylabel("Best-so-far objective value")
+        plt.ylim(get_plot_bounds(problem))
         plt.grid(True, alpha=0.3)
         plt.legend()
         plt.tight_layout()
