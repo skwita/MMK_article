@@ -54,7 +54,7 @@ def plot_convergence(results, problems, save_dir="plots", show_std=True):
 
         plt.figure(figsize=(10, 6))
 
-        for method_name, (bench, _) in sorted(method_data.items()):
+        for method_name, (bench, _, _) in sorted(method_data.items()):
             mean_hist = bench.mean_history()
             std_hist = bench.std_history()
 

@@ -30,8 +30,9 @@ def _run_single(problem, optimizer, runs):
     bench = BenchmarkResult(scores, solutions, histories, objective=problem.objective)
 
     avg_time = sum(times) / len(times)
+    total_time = sum(times)
 
-    return pname, oname, bench, avg_time
+    return pname, oname, bench, avg_time, total_time
 
 
 class Benchmark:
@@ -62,8 +63,8 @@ class Benchmark:
                     )
 
             for future in futures:
-                pname, oname, bench, avg_time = future.result()
-                results[pname][oname] = (bench, avg_time)
+                pname, oname, bench, avg_time, total_time = future.result()
+                results[pname][oname] = (bench, avg_time, total_time)
 
         self._print_table(results)
 
@@ -84,6 +85,7 @@ class Benchmark:
                 f"{'Best':>15} "
                 f"{'Median':>15} "
                 f"{'Time(s)':>15}"
+                f"{'Total time(s)':>15}"
                 f"{'Solution':>15}"
             )
 
@@ -92,7 +94,7 @@ class Benchmark:
 
             for oname in sorted(results[pname].keys()):
 
-                bench, avg_time = results[pname][oname]
+                bench, avg_time, total_time = results[pname][oname]
 
                 print(
                     f"{oname:<{method_width}} "
@@ -101,5 +103,6 @@ class Benchmark:
                     f"{bench.best:>15.4f} "
                     f"{bench.median:>15.4f} "
                     f"{avg_time:>15.3f}"
+                    f"{total_time:>15.3f}"
                     f"{bench.best_solution}"
                 )

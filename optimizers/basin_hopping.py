@@ -7,12 +7,12 @@ from core.result import OptimizationResult
 
 class BasinHopping(Optimizer):
 
-    def __init__(self, iterations=10000, local_steps=20, temperature=1.0):
+    def __init__(self, iterations=1000, local_steps=20, temperature=1.0):
         super().__init__(iterations)
         self.local_steps = local_steps
         self.temperature = temperature
 
-    def _local_search(self, problem, x):
+    def _local_search(self, problem, x, history=None, global_best_value=None):
         current = copy.deepcopy(x)
         current_value = problem.evaluate(current)
 
@@ -31,6 +31,12 @@ class BasinHopping(Optimizer):
                     best_local = copy.deepcopy(current)
                     best_local_value = current_value
 
+            if history is not None:
+                value_for_history = best_local_value
+                if global_best_value is not None and problem.is_better(global_best_value, value_for_history):
+                    value_for_history = global_best_value
+                history.append(value_for_history)
+
         return best_local, best_local_value
 
     def worsening(self, current, candidate, problem):
@@ -40,29 +46,30 @@ class BasinHopping(Optimizer):
             return current - candidate
 
     def optimize(self, problem):
+        history = []
 
         x = problem.sample_solution()
-        x, value = self._local_search(problem, x)
+        x, value = self._local_search(problem, x, history=history)
 
         best = copy.deepcopy(x)
         best_value = value
 
-        history = []
-
         for _ in range(self.iterations):
-
-            # глобальный "прыжок"
             y = problem.neighbor(x)
 
-            # локальная оптимизация после прыжка
-            y, y_value = self._local_search(problem, y)
+            y, y_value = self._local_search(
+                problem,
+                y,
+                history=history,
+                global_best_value=best_value
+            )
 
             accepted = False
 
             if problem.is_better(y_value, value):
                 accepted = True
             else:
-                delta = self.worsening(value, y_value, problem)  # delta > 0 для ухудшения
+                delta = self.worsening(value, y_value, problem)
                 try:
                     accepted = random.random() < math.exp(-delta / self.temperature)
                 except OverflowError:
