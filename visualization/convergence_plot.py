@@ -3,6 +3,8 @@ import itertools
 import numpy as np
 import matplotlib.pyplot as plt
 
+from config import run_config
+
 
 def _knapsack_optimal_value(problem):
     """
@@ -48,7 +50,7 @@ def get_plot_bounds(problem):
     return problem_bounds[name]
 
 
-def plot_convergence(results, problems, CEM_data, save_dir="plots", show_std=True):
+def plot_convergence(results, problems, save_dir="plots", show_std=True):
     """
     Для каждой задачи строит один график:
     - кривые mean(best-so-far) для всех методов
@@ -78,7 +80,8 @@ def plot_convergence(results, problems, CEM_data, save_dir="plots", show_std=Tru
             #     continue
 
             if method_name == "CrossEntropyMethod":
-                x = np.arange(1, len(median) + 1) * CEM_data[1]
+                population_size = run_config.EXPERIMENT_CONFIG[problem_name]["CrossEntropyMethod"]["population_size"]
+                x = np.arange(1, len(median) + 1) * population_size
             else:
                 x = np.arange(1, len(median) + 1)
 

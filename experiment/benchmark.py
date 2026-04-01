@@ -3,6 +3,8 @@ from collections import defaultdict
 from concurrent.futures import ProcessPoolExecutor
 
 from experiment.benchmar_results import BenchmarkResult
+from config.optimizers_registry import OPTIMIZER_REGISTRY
+from config.run_config import EXPERIMENT_CONFIG
 
 
 def _run_single(problem, optimizer, runs):
@@ -34,6 +36,16 @@ def _run_single(problem, optimizer, runs):
 
     return pname, oname, bench, avg_time, total_time
 
+def build_optimizers_for_problem(problem):
+    problem_name = problem.__class__.__name__
+    problem_config = EXPERIMENT_CONFIG[problem_name]
+
+    optimizers = []
+    for optimizer_name, params in problem_config.items():
+        optimizer_cls = OPTIMIZER_REGISTRY[optimizer_name]
+        optimizers.append(optimizer_cls(**params))
+
+    return optimizers
 
 class Benchmark:
 
@@ -51,7 +63,8 @@ class Benchmark:
         with ProcessPoolExecutor(max_workers=self.workers) as executor:
 
             for problem in self.problems:
-                for optimizer in self.optimizers:
+                optimizers = build_optimizers_for_problem(problem)
+                for optimizer in optimizers:
 
                     futures.append(
                         executor.submit(

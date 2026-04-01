@@ -27,7 +27,6 @@ if __name__ == "__main__":
     ackley_dimensions     = 2
     schwefel_dimensions   = 2
 
-    iteration_num = 40000
 
     # ОПТИМИЗАЦИОННЫЕ ЗАДАЧИ
     rastrigin = RastriginProblem(rastrigin_dimensions)
@@ -44,16 +43,13 @@ if __name__ == "__main__":
         knapsack,
     ]
 
-    CEM_iter = 200
-    CEM_population = 50
-
     # ОПТИМИЗАТОРЫ
     optimizers = [
-        RandomSearch(iterations=iteration_num),
-        SimulatedAnnealing(iterations=iteration_num, T0=1.0, alpha=0.995),
-        CrossEntropyMethod(iterations=CEM_iter, population_size=CEM_population, elite_frac=0.2, alpha=0.7, min_sigma=1e-3, min_probability=0.01, max_probability=0.99),
-        BasinHopping(iterations=1000, local_steps=20, temperature=1.0),
-        AdaptiveRandomSearch(iterations=iteration_num, min_step=1e-6, max_step=10.0, step_increase=1.05, step_decrease=0.95, stagnation_limit=100),
+        RandomSearch(),
+        SimulatedAnnealing(),
+        CrossEntropyMethod(),
+        BasinHopping(),
+        AdaptiveRandomSearch(),
     ]
 
     benchmark = Benchmark(
@@ -63,4 +59,4 @@ if __name__ == "__main__":
     )
 
     results = benchmark.run()
-    plot_convergence(results, problems, [CEM_iter, CEM_population], save_dir="plots", show_std=True)
+    plot_convergence(results, problems, save_dir="plots", show_std=True)
